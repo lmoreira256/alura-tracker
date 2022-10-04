@@ -7,18 +7,18 @@
       <div class="column">
         <div class="is-flex is-align-items-center is-justify-content-space-between">
           <section>
-            <strong>00:00:00</strong>
+            <strong>{{ timer }}</strong>
           </section>
-          <button class="button">
-          <span class="icon">
-            <i class="fas fa-play"></i>
-          </span>
+          <button class="button" @click="start">
+            <span class="icon">
+              <i class="fas fa-play"></i>
+            </span>
             <span>play</span>
           </button>
-          <button class="button">
-          <span class="icon">
-            <i class="fa fa-stop"></i>
-          </span>
+          <button class="button" @click="stop">
+            <span class="icon">
+              <i class="fa fa-stop"></i>
+            </span>
             <span>stop</span>
           </button>
 
@@ -33,6 +33,27 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: 'TimeForm',
+  data() {
+    return {
+      time: 0,
+      timerId: 0
+    }
+  },
+  computed: {
+    timer(): string {
+      return new Date(this.time * 1000).toISOString().substring(11, 19)
+    }
+  },
+  methods: {
+    start() {
+      this.timerId = setInterval(() => {
+        this.time++
+      }, 1000)
+    },
+    stop() {
+      clearInterval(this.timerId)
+    }
+  }
 });
 </script>
 
