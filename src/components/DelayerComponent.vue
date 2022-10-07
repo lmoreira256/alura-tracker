@@ -1,24 +1,17 @@
 <template>
   <div class="is-flex is-align-items-center is-justify-content-space-between">
     <ChronometerComponent :time="time"/>
-    <button class="button" @click="start" :disabled="timeRunning">
-            <span class="icon">
-              <i class="fas fa-play"></i>
-            </span>
-      <span>play</span>
-    </button>
-    <button class="button" @click="stop" :disabled="!timeRunning">
-            <span class="icon">
-              <i class="fa fa-stop"></i>
-            </span>
-      <span>stop</span>
-    </button>
+
+    <ActionButton description="play" icon="fa-play" :disabled="timeRunning" @click="start" />
+    <ActionButton description="stop" icon="fa-stop" :disabled="!timeRunning" @click="stop" />
+
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
 import ChronometerComponent from "@/components/ChronometerComponent.vue";
+import ActionButton from "@/components/ActionButton.vue";
 
 export default defineComponent({
   name: 'DelayerComponent',
@@ -26,7 +19,8 @@ export default defineComponent({
       'timerStop'
   ],
   components: {
-    ChronometerComponent
+    ChronometerComponent,
+    ActionButton
   },
   data() {
     return {
