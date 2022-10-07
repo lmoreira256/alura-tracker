@@ -22,6 +22,9 @@ import ChronometerComponent from "@/components/ChronometerComponent.vue";
 
 export default defineComponent({
   name: 'DelayerComponent',
+  emits: [
+      'timerStop'
+  ],
   components: {
     ChronometerComponent
   },
@@ -42,6 +45,8 @@ export default defineComponent({
     stop() {
       this.timeRunning = false
       clearInterval(this.timerId)
+      this.$emit('timerStop', this.time)
+      this.time = 0
     }
   }
 })
