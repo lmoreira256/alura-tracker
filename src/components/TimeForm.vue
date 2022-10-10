@@ -10,18 +10,21 @@
         />
       </div>
       <div class="column">
-        <DelayerComponent @timerStop="stopTask" />
+        <DelayerComponent @timerStop="stopTask"/>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import DelayerComponent from "@/components/DelayerComponent.vue";
 
 export default defineComponent({
   name: 'TimeForm',
+  emits: [
+    'saveTask'
+  ],
   components: {
     DelayerComponent
   },
@@ -32,8 +35,10 @@ export default defineComponent({
   },
   methods: {
     stopTask(time: number) {
-      console.log(this.taskDescription)
-      console.log(time)
+      this.$emit('saveTask', {
+        time: time,
+        description: this.taskDescription
+      })
       this.taskDescription = ''
     }
   }
