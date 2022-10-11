@@ -3,6 +3,9 @@
     <h1>
       <img src="../assets/logo.png" alt="">
     </h1>
+    <button class="button" @click="alterTheme">
+      {{ buttonThemeText }} modo escuro
+    </button>
   </header>
 </template>
 
@@ -10,7 +13,26 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'SideBar'
+  name: 'SideBar',
+  emits: [
+    'alterTheme'
+  ],
+  data() {
+    return {
+      darkThemeActive: false
+    }
+  },
+  computed: {
+    buttonThemeText() {
+      return this.darkThemeActive ? 'Desativar ' : 'Ativar '
+    }
+  },
+  methods: {
+    alterTheme() {
+      this.darkThemeActive = !this.darkThemeActive
+      this.$emit('alterTheme', this.darkThemeActive)
+    }
+  }
 });
 </script>
 
@@ -20,6 +42,7 @@ header {
   background: #0D3B66;
   width: 100%;
   height: 100vh;
+  text-align: center;
 }
 
 @media only screen and (max-width: 768px) {
