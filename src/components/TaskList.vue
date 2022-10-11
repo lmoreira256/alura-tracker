@@ -5,7 +5,7 @@
         {{ task.description || 'Tarefa sem descrição' }}
       </div>
       <div class="column">
-        <ChronometerComponent :time="task.time"/>
+        <ChronometerComponent :time="task.time" :fixColor="'#363636'" />
       </div>
     </div>
   </TaskBox>

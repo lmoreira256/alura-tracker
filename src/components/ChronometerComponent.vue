@@ -1,6 +1,6 @@
 <template>
   <section>
-    <strong class="display">{{ timer }}</strong>
+    <strong class="display" :style="[fixColor ? { 'color': fixColor } : '']">{{ timer }}</strong>
   </section>
 </template>
 
@@ -13,6 +13,10 @@ export default defineComponent({
     time: {
       type: Number,
       default: 0
+    },
+    fixColor: {
+      type: String,
+      default: ''
     }
   },
   computed: {
