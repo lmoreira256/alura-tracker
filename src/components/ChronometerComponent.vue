@@ -1,5 +1,8 @@
 <template>
   <section>
+    <span class="icon">
+      <i class="fa-solid fa-stopwatch"></i>
+    </span>
     <strong class="display" :style="[fixColor ? { 'color': fixColor } : '']">{{ timer }}</strong>
   </section>
 </template>
