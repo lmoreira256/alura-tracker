@@ -1,13 +1,26 @@
 <template>
   <div class="box form">
     <div class="columns">
-      <div class="column is-8" role="form" aria-label="Formulário para criação de uma nova tarefa">
+      <div class="column is-5" role="form" aria-label="Formulário para criação de uma nova tarefa">
         <input
             type="text"
             class="input"
             placeholder="Qual tarefa você deseja iniciar"
             v-model="taskDescription"
         />
+      </div>
+      <div class="column is-3">
+        <div class="select">
+          <select v-model="projectId">
+            <option value="">Selecione o projeto</option>
+            <option
+                :value="project.id"
+                v-for="project in projects"
+                :key="project.id">
+              {{ project.name }}
+            </option>
+          </select>
+        </div>
       </div>
       <div class="column">
         <DelayerComponent @timerStop="stopTask"/>
@@ -17,8 +30,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {computed, defineComponent} from "vue";
 import DelayerComponent from "@/components/DelayerComponent.vue";
+import {useStore} from "vuex";
+import {key} from "@/store";
 
 export default defineComponent({
   name: 'TimeForm',
@@ -30,16 +45,25 @@ export default defineComponent({
   },
   data() {
     return {
-      taskDescription: ''
+      taskDescription: '',
+      projectId: ''
     }
   },
   methods: {
     stopTask(time: number) {
       this.$emit('saveTask', {
         time: time,
-        description: this.taskDescription
+        description: this.taskDescription,
+        projects: this.projects.find(proj => proj.id == this.projectId)
       })
       this.taskDescription = ''
+    }
+  },
+  setup() {
+    const store = useStore(key)
+
+    return {
+      projects: computed(() => store.state.projects)
     }
   }
 });
