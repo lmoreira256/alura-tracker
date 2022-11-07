@@ -1,0 +1,3 @@
+export const ADD_PROJECT = 'ADD_PROJECT'
+export const PUT_PROJECT = 'PUT_PROJECT'
+export const DELETE_PROJECT = 'DELETE_PROJECT'
