@@ -19,7 +19,8 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useStore} from "@/store";
-import {ADD_PROJECT, PUT_PROJECT} from "@/store/mutation-type";
+import {ADD_PROJECT, NOTIFICATION, PUT_PROJECT} from "@/store/mutation-type";
+import {NotificationType} from "@/interfaces/INotification";
 
 export default defineComponent({
   name: 'ProjectFormView',
@@ -51,6 +52,11 @@ export default defineComponent({
       }
 
       this.projectName = ''
+      this.store.commit(NOTIFICATION, {
+        title: 'SUCESSO',
+        message: 'O novo projeto foi salvo com sucesso!',
+        type: NotificationType.SUCCESS
+      })
       this.$router.push('/projects')
     }
   },
