@@ -2,68 +2,80 @@
   <section>
     <form @submit.prevent="save">
       <div class="field">
-        <label for="projectName" class="label">
-          Nome do Projeto
-        </label>
-        <input type="text" class="input" v-model="projectName" id="projectName">
+        <label for="projectName" class="label"> Nome do Projeto </label>
+        <input
+          type="text"
+          class="input"
+          v-model="projectName"
+          id="projectName"
+        />
       </div>
       <div class="field">
-        <button class="button" type="submit">
-          Salvar
-        </button>
+        <button class="button" type="submit">Salvar</button>
       </div>
     </form>
   </section>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useStore} from "@/store";
-import {ADD_PROJECT, PUT_PROJECT} from "@/store/mutation-type";
-import {NotificationType} from "@/interfaces/INotification";
-import useNotify from "@/hooks/notifier"
+import { defineComponent } from "vue";
+import { useStore } from "@/store";
+import { NotificationType } from "@/interfaces/INotification";
+import useNotify from "@/hooks/notifier";
+import { CREATE_PROJECT, UPDATE_PROJECT } from "@/store/actions-type";
 
 export default defineComponent({
-  name: 'ProjectFormView',
+  name: "ProjectFormView",
   data() {
     return {
-      projectName: '',
-    }
+      projectName: "",
+    };
   },
   props: {
     id: {
-      type: String
-    }
+      type: String,
+    },
   },
   mounted() {
     if (this.id) {
-      const project = this.store.state.projects.find(proj => proj.id === this.id)
-      this.projectName = project?.name || ''
+      const project = this.store.state.projects.find(
+        (proj) => proj.id == this.id
+      );
+      this.projectName = project?.name || "";
     }
   },
   methods: {
     save() {
       if (this.id) {
-        this.store.commit(PUT_PROJECT, {
-          id: this.id,
-          name: this.projectName
-        })
+        this.store
+          .dispatch(UPDATE_PROJECT, {
+            id: this.id,
+            name: this.projectName,
+          })
+          .then(() => this.successSave());
       } else {
-        this.store.commit(ADD_PROJECT, this.projectName)
+        this.store
+          .dispatch(CREATE_PROJECT, this.projectName)
+          .then(() => this.successSave());
       }
-
-      this.projectName = ''
-      this.notify(NotificationType.SUCCESS, 'SUCESSO!', 'O projeto foi salvo com sucesso!!!')
-      this.$router.push('/projects')
-    }
+    },
+    successSave() {
+      this.projectName = "";
+      this.notify(
+        NotificationType.SUCCESS,
+        "SUCESSO!",
+        "O projeto foi salvo com sucesso!!!"
+      );
+      this.$router.push("/projects");
+    },
   },
   setup() {
     const store = useStore();
     const { notify } = useNotify();
     return {
       store,
-      notify
-    }
-  }
-})
+      notify,
+    };
+  },
+});
 </script>

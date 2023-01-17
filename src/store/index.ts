@@ -1,8 +1,10 @@
 import IProject from "@/interfaces/IProject";
-import {createStore, Store, useStore as vuexUseStore} from "vuex";
-import {InjectionKey} from "vue";
-import {ADD_PROJECT, DELETE_PROJECT, NOTIFICATION, PUT_PROJECT} from "@/store/mutation-type";
-import {INotification} from "@/interfaces/INotification";
+import { createStore, Store, useStore as vuexUseStore } from "vuex";
+import { InjectionKey } from "vue";
+import { ADD_PROJECT, DEFINE_PROJECTS, DELETE_PROJECT, NOTIFICATION, PUT_PROJECT } from "@/store/mutation-type";
+import { INotification } from "@/interfaces/INotification";
+import { CREATE_PROJECT, GET_PROJECTS, UPDATE_PROJECT } from "./actions-type";
+import http from "@/http";
 
 interface State {
     projects: IProject[],
@@ -31,6 +33,9 @@ export const store = createStore<State>({
         [DELETE_PROJECT](state, id: string) {
             state.projects = state.projects.filter(proj => proj.id != id)
         },
+        [DEFINE_PROJECTS](state, projects: IProject[]) {
+            state.projects = projects
+        },
         [NOTIFICATION](state, newNotification: INotification) {
             newNotification.id = new Date().getTime();
             state.notifications.push(newNotification);
@@ -38,6 +43,24 @@ export const store = createStore<State>({
             setTimeout(() => {
                 state.notifications = state.notifications.filter(notification => notification.id != newNotification.id)
             }, 3000)
+        }
+    },
+    actions: {
+        [GET_PROJECTS]({ commit }) {
+            http.get('projects')
+                .then((response) => commit(DEFINE_PROJECTS, response.data))
+        },
+        [CREATE_PROJECT](context, projectName: string) {
+            return http.post('/projects', {
+                name: projectName
+            })
+        },
+        [UPDATE_PROJECT](context, project: IProject) {
+            return http.put(`/projects/${project.id}`, project)
+        },
+        [DELETE_PROJECT]({ commit }, projectId: string) {
+            return http.delete(`/projects/${projectId}`)
+                .then(() => commit(DELETE_PROJECT, projectId))
         }
     }
 })
