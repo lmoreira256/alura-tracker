@@ -1,13 +1,15 @@
 import IProject from "@/interfaces/IProject";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import { InjectionKey } from "vue";
-import { ADD_PROJECT, DEFINE_PROJECTS, DELETE_PROJECT, NOTIFICATION, PUT_PROJECT } from "@/store/mutation-type";
+import { ADD_PROJECT, ADD_TASK, DEFINE_PROJECTS, DEFINE_TASK, DELETE_PROJECT, NOTIFICATION, PUT_PROJECT } from "@/store/mutation-type";
 import { INotification } from "@/interfaces/INotification";
-import { CREATE_PROJECT, GET_PROJECTS, UPDATE_PROJECT } from "./actions-type";
+import { CREATE_PROJECT, CREATE_TASK, GET_PROJECTS, GET_TASKS, UPDATE_PROJECT } from "./actions-type";
 import http from "@/http";
+import ITask from "@/interfaces/ITask";
 
 interface State {
     projects: IProject[],
+    tasks: ITask[],
     notifications: INotification[]
 }
 
@@ -16,6 +18,7 @@ export const key: InjectionKey<Store<State>> = Symbol()
 export const store = createStore<State>({
     state: {
         projects: [],
+        tasks: [],
         notifications: []
     },
     mutations: {
@@ -35,6 +38,12 @@ export const store = createStore<State>({
         },
         [DEFINE_PROJECTS](state, projects: IProject[]) {
             state.projects = projects
+        },
+        [DEFINE_TASK](state, tasks: ITask[]) {
+            state.tasks = tasks
+        },
+        [ADD_TASK](state, task: ITask) {
+            state.tasks.push(task)
         },
         [NOTIFICATION](state, newNotification: INotification) {
             newNotification.id = new Date().getTime();
@@ -61,7 +70,14 @@ export const store = createStore<State>({
         [DELETE_PROJECT]({ commit }, projectId: string) {
             return http.delete(`/projects/${projectId}`)
                 .then(() => commit(DELETE_PROJECT, projectId))
-        }
+        },
+        [GET_TASKS]({ commit }) {
+            http.get('tasks')
+                .then((response) => commit(DEFINE_TASK, response.data))
+        },
+        [CREATE_TASK]({ commit }, task: ITask) {
+            return http.post('/tasks', task).then(response => commit(ADD_TASK, response.data))
+        },
     }
 })
 

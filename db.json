@@ -8,5 +8,30 @@
       "id": 2,
       "name": "Estudar Vue"
     }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "time": 120,
+      "description": "Estudar VUE",
+      "project": {
+        "id": 1,
+        "name": "Alura Tracker 3.0"
+      }
+    },
+    {
+      "time": 3,
+      "description": "Melhorar Projeto",
+      "project": {
+        "id": 1,
+        "name": "Alura Tracker 3.0"
+      },
+      "id": 2
+    },
+    {
+      "time": 2,
+      "description": "ASdasdas",
+      "id": 3
+    }
   ]
 }
